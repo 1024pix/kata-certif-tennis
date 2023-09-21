@@ -2,19 +2,14 @@ import { describe, it } from "node:test";
 import assert from "node:assert";
 
 function checkScore(teamAScore, teamBScore) {
-  if (teamAScore === 0) {
-    if (teamBScore === 2) {
-      return "love - thirty";
-    }
 
-    if (teamBScore === 3) {
-      return "love - fourty";
-    }
-
-    return "love - fifteen";
+  if(teamAScore === teamBScore){
+    return "deuce";
   }
 
-  return "deuce";
+  const array = ['love','fifteen','thirty','fourty'];
+
+  return `${array[teamAScore]} - ${array[teamBScore]}`;
 }
 
 describe("#Score", () => {
@@ -58,5 +53,16 @@ describe("#Score", () => {
       // then
       assert.strictEqual(result, expected);
     });
+  });
+
+  describe("when given (1,0)", () => {
+      it('it displays "fifteen - love"', () => {
+        // given
+        const expected = "fifteen - love";
+        // when
+        const result = checkScore(1, 0);
+        // then
+        assert.strictEqual(result, expected);
+      });
   });
 });

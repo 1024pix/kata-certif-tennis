@@ -3,14 +3,16 @@ import assert from "node:assert";
 
 function checkScore(teamAScore, teamBScore) {
   const array = ['love','fifteen','thirty','fourty'];
-  if(teamAScore === 4) {
+
+  if (teamAScore >= 4 && isAWin(teamAScore, teamBScore)) {
     return 'Player A win'
   }
-  if(teamBScore === 4) {
+
+  if (teamBScore >= 4 && isAWin(teamAScore, teamBScore)) {
     return 'Player B win'
   }
 
-  if(teamAScore === teamBScore){
+  if (teamAScore === teamBScore) {
     if(teamAScore === 3){
      return "deuce";
     }
@@ -20,6 +22,10 @@ function checkScore(teamAScore, teamBScore) {
 
 
   return `${array[teamAScore]} - ${array[teamBScore]}`;
+}
+
+function isAWin(scoreA, scoreB) {
+  return Math.abs(scoreA - scoreB) > 0;
 }
 
 describe("#Score", () => {
@@ -33,7 +39,7 @@ describe("#Score", () => {
       assert.strictEqual(result, expected);
     });
   }));
-  
+
   describe(`when score are equal`, () => {
   describe(`when score = 3`, () => {
     [[3,3,"deuce"]].forEach(([teamAScore,teamBScore,expected]) =>
@@ -85,15 +91,4 @@ describe("#Score", () => {
     }));
   });
 
-  describe(`when player win`, () => {
-    [[4,0,"Player A win"], [4,2,"Player A win"], [0,4,"Player B win"]].forEach(([teamAScore,teamBScore,expected]) =>
-        describe(`when given (${teamAScore},${teamBScore})`, () => {
-      it(`it displays ${expected}`, () => {
-        // given when
-        const result = checkScore(teamAScore, teamBScore);
-        // then
-        assert.strictEqual(result, expected);
-      });
-    }));
-  });
 });

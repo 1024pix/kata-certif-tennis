@@ -1,7 +1,9 @@
 {
     "name": "tennis-kata",
     "version": "1.0.0",
-    
-    "type": "module"
+    "type": "module",
+    "scripts": {
+      "test": "node tennis.test.js"
+    }
   }
   

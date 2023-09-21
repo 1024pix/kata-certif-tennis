@@ -6,6 +6,9 @@ function checkScore(teamAScore, teamBScore) {
   if(teamAScore === 4) {
     return 'Player A win'
   }
+  if(teamBScore === 4) {
+    return 'Player B win'
+  }
 
   if(teamAScore === teamBScore){
     if(teamAScore === 3){
@@ -32,7 +35,33 @@ describe("#Score", () => {
   }));
   
   describe(`when score are equal`, () => {
-  [[3,3,"deuce"], [0,0,"love - all"], [1,1,"fifteen - all"], [2,2,"thirty - all"]].forEach(([teamAScore,teamBScore,expected]) =>
+  describe(`when score = 3`, () => {
+    [[3,3,"deuce"]].forEach(([teamAScore,teamBScore,expected]) =>
+    describe(`when given (${teamAScore},${teamBScore})`, () => {
+      it(`it displays ${expected}`, () => {
+        // given when
+        const result = checkScore(teamAScore, teamBScore);
+        // then
+        assert.strictEqual(result, expected);
+      });
+  }));
+});
+  describe(`when score > 3`, () => {
+    [[4,4,"4 - all"]].forEach(([teamAScore,teamBScore,expected]) =>
+    describe(`when given (${teamAScore},${teamBScore})`, () => {
+      it(`it displays ${expected}`, () => {
+        // given when
+        const result = checkScore(teamAScore, teamBScore);
+        // then
+        assert.strictEqual(result, expected);
+      });
+  }));
+})
+
+    describe(`when score is lower than 3`, () => {
+
+
+  [[0,0,"love - all"], [1,1,"fifteen - all"], [2,2,"thirty - all"]].forEach(([teamAScore,teamBScore,expected]) =>
       describe(`when given (${teamAScore},${teamBScore})`, () => {
         it(`it displays ${expected}`, () => {
           // given when
@@ -42,8 +71,22 @@ describe("#Score", () => {
         });
     }));
   });
+  });
+
   describe(`when player win`, () => {
-    [[4,0,"Player A win"], [4,2,"Player A win"]].forEach(([teamAScore,teamBScore,expected]) =>
+    [[4,0,"Player A win"], [4,2,"Player A win"], [0,4,"Player B win"]].forEach(([teamAScore,teamBScore,expected]) =>
+        describe(`when given (${teamAScore},${teamBScore})`, () => {
+      it(`it displays ${expected}`, () => {
+        // given when
+        const result = checkScore(teamAScore, teamBScore);
+        // then
+        assert.strictEqual(result, expected);
+      });
+    }));
+  });
+
+  describe(`when player win`, () => {
+    [[4,0,"Player A win"], [4,2,"Player A win"], [0,4,"Player B win"]].forEach(([teamAScore,teamBScore,expected]) =>
         describe(`when given (${teamAScore},${teamBScore})`, () => {
       it(`it displays ${expected}`, () => {
         // given when

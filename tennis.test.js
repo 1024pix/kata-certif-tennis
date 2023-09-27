@@ -97,6 +97,55 @@ function checkScore(teamAScore, teamBScore) {
 
 describe("#Score", () => {
   [
+    [0, 0, "love - all"],
+    [1, 1, "fifteen - all"],
+    [2, 2, "thirty - all"],
+    [3, 3, "deuce"],
+   // [4, 4, "deuce"],
+
+    [1, 0, "fifteen - love"],
+    [0, 1, "love - fifteen"],
+    [2, 0, "thirty - love"],
+    [0, 2, "love - thirty"],
+    [3, 0, "fourty - love"],
+    [0, 3, "love - fourty"],
+    [4, 0, "teamA win"],
+    [0, 4, "teamB win"],
+
+    [2, 1, "thirty - fifteen"],
+    [1, 2, "fifteen - thirty"],
+    [3, 1, "fourty - fifteen"],
+    [1, 3, "fifteen - fourty"],
+    [4, 1, "teamA win"],
+    [1, 4, "teamB win"],
+
+    [3, 2, "fourty - thirty"],
+    [2, 3, "thirty - fourty"],
+    [4, 2, "teamA win"],
+    [2, 4, "teamB win"],
+
+    [4, 3, "Advantage teamA"],
+    [3, 4, "Advantage teamB"],
+    [5, 4, "Advantage teamA"],
+    [4, 5, "Advantage teamB"],
+    [15, 14, "Advantage teamA"],
+    [14, 15, "Advantage teamB"],
+
+    [6, 4, "teamA win"],
+    [4, 6, "teamB win"],
+    [16, 14, "teamA win"],
+    [14, 16, "teamB win"],
+  ].forEach(([teamAScore, teamBScore, expected]) =>
+    describe(`when given (${teamAScore},${teamBScore})`, () => {
+      it(`it displays ${expected}`, () => {
+        // given when
+        const result = checkScore(teamAScore, teamBScore);
+        // then
+        assert.strictEqual(result, expected);
+      });
+    })
+  );
+  [
     [0, 1, "love - fifteen"],
     [0, 2, "love - thirty"],
     [0, 3, "love - fourty"],
@@ -162,7 +211,7 @@ describe("#Score", () => {
   });
 
   describe(`when score is higher than 3`, () => {
-    describe(`when player has advantage`, () => {
+    describe(`when player has Advantage`, () => {
       [
         [4, 3, "Advantage teamA"],
         [12, 13, "Advantage teamB"],

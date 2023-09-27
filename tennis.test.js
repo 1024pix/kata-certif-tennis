@@ -9,8 +9,8 @@ class Team {
     this.#points = points;
   }
 
-  isWinning(opponentScore = 0) {
-    return this.#points >= 4 && (this.score - opponentScore) > 0;
+  isWinning(opponentPoints = 0) {
+    return this.#points >= 4 && (this.#points - opponentPoints) > 0;
   }
 
   get score() {
@@ -23,27 +23,40 @@ class Team {
 
 }
 
+class Game {
+  constructor({ teamA, teamB }) {
+    this.teamA = teamA;
+    this.teamB = teamB;
+  }
+
+  get result(){
+    if (this.teamA.isWinning(this.teamB.points)) {
+      return `${this.teamA.name} win`;
+    }
+
+    if (this.teamB.isWinning(this.teamA.points)) {
+      return `${this.teamB.name} win`;
+    }
+
+    if (this.teamA.points === this.teamB.points) {
+      if (this.teamA.points === 3) {
+        return "deuce";
+      }
+
+      return `${this.teamA.score} - all`;
+    }
+
+    return `${this.teamA.score} - ${this.teamB.score}`;
+  }
+}
+
 function checkScore(teamAScore, teamBScore) {
   const teamA = new Team({name: 'teamA', points: teamAScore});
   const teamB = new Team({name: 'teamB', points: teamBScore});
 
-  if (teamA.isWinning(teamB.points)) {
-    return `${teamA.name} win`;
-  }
+  const game = new Game({teamA, teamB});
 
-  if (teamB.isWinning(teamA.points)) {
-    return `${teamB.name} win`;
-  }
-
-  if (teamA.points === teamB.points) {
-    if (teamA.points === 3) {
-      return "deuce";
-    }
-
-    return `${teamA.score} - all`;
-  }
-
-  return `${teamA.score} - ${teamB.score}`;
+  return game.result;
 }
 
 

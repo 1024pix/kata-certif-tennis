@@ -29,8 +29,13 @@ class Game {
   }
 
   get result() {
+
     if (this.#hasWinner()) {
       return `${this.#getWinner()} win`;
+    }
+
+    if (this.#hasAdvantage()) {
+      return `Advantage ${this.teamA.name}`;
     }
 
     if (this.teamA.points === this.teamB.points) {
@@ -55,6 +60,10 @@ class Game {
       this.teamA.isWinning(this.teamB.points) ||
       this.teamB.isWinning(this.teamA.points)
     );
+  }
+
+  #hasAdvantage() {
+    return this.teamA.points + this.teamB.points >= 7 && Math.abs(this.teamA.points - this.teamB.points) === 1;
   }
 }
 
@@ -133,10 +142,27 @@ describe("#Score", () => {
     });
   });
 
+  describe(`when score is higher than 3`, () => {
+    describe(`when player has advantage`, () => {
+    [
+      [4, 3, "Advantage teamA"],
+    ].forEach(([teamAScore, teamBScore, expected]) =>
+      describe(`when given (${teamAScore},${teamBScore})`, () => {
+        it(`it displays ${expected}`, () => {
+          // given when
+          const result = checkScore(teamAScore, teamBScore);
+          // then
+          assert.strictEqual(result, expected);
+        });
+      })
+    );
+    });
+
   describe(`when player win`, () => {
     [
       [4, 0, "teamA win"],
       [4, 2, "teamA win"],
+      [7, 5, "teamA win"],
       [0, 4, "teamB win"],
     ].forEach(([teamAScore, teamBScore, expected]) =>
       describe(`when given (${teamAScore},${teamBScore})`, () => {
@@ -148,5 +174,6 @@ describe("#Score", () => {
         });
       })
     );
+  });
   });
 });

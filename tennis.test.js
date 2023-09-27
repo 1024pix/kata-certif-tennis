@@ -6,6 +6,10 @@ class Team {
     this.name = name;
     this.score = score;
   }
+
+  isWinning(opponentScore = 0) {
+    return this.score >= 4 && (this.score - opponentScore) > 0;
+  }
 }
 
 function checkScore(teamAScore, teamBScore) {
@@ -13,11 +17,11 @@ function checkScore(teamAScore, teamBScore) {
   const teamA = new Team({name: 'teamA', score: teamAScore});
   const teamB = new Team({name: 'teamB', score: teamBScore});
 
-  if (teamA.score >= 4 && isAWin(teamA.score, teamB.score)) {
+  if (teamA.isWinning(teamB.score)) {
     return `${teamA.name} win`;
   }
 
-  if (teamB.score >= 4 && isAWin(teamA.score, teamB.score)) {
+  if (teamB.isWinning(teamA.score)) {
     return `${teamB.name} win`;
   }
 

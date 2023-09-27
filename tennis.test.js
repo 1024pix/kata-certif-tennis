@@ -4,23 +4,22 @@ import assert from "node:assert";
 class Team {
   #points;
   scoreNames = ["love", "fifteen", "thirty", "fourty"];
-  constructor({name, points = 0}) {
+  constructor({ name, points = 0 }) {
     this.name = name;
     this.#points = points;
   }
 
   isWinning(opponentPoints = 0) {
-    return this.#points >= 4 && (this.#points - opponentPoints) > 0;
+    return this.#points >= 4 && this.#points - opponentPoints > 1;
   }
 
   get score() {
     return this.scoreNames[this.#points] ?? this.#points;
   }
 
-  get points(){
-    return this.#points
+  get points() {
+    return this.#points;
   }
-
 }
 
 class Game {
@@ -29,13 +28,9 @@ class Game {
     this.teamB = teamB;
   }
 
-  get result(){
-    if (this.teamA.isWinning(this.teamB.points)) {
-      return `${this.teamA.name} win`;
-    }
-
-    if (this.teamB.isWinning(this.teamA.points)) {
-      return `${this.teamB.name} win`;
+  get result() {
+    if (this.#hasWinner()) {
+      return `${this.#getWinner()} win`;
     }
 
     if (this.teamA.points === this.teamB.points) {
@@ -48,17 +43,29 @@ class Game {
 
     return `${this.teamA.score} - ${this.teamB.score}`;
   }
+
+  #getWinner() {
+    return this.teamA.isWinning(this.teamB.points)
+      ? this.teamA.name
+      : this.teamB.name;
+  }
+
+  #hasWinner() {
+    return (
+      this.teamA.isWinning(this.teamB.points) ||
+      this.teamB.isWinning(this.teamA.points)
+    );
+  }
 }
 
 function checkScore(teamAScore, teamBScore) {
-  const teamA = new Team({name: 'teamA', points: teamAScore});
-  const teamB = new Team({name: 'teamB', points: teamBScore});
+  const teamA = new Team({ name: "teamA", points: teamAScore });
+  const teamB = new Team({ name: "teamB", points: teamBScore });
 
-  const game = new Game({teamA, teamB});
+  const game = new Game({ teamA, teamB });
 
   return game.result;
 }
-
 
 describe("#Score", () => {
   [
@@ -93,7 +100,10 @@ describe("#Score", () => {
       );
     });
     describe(`when score > 3`, () => {
-      [[4, 4, "4 - all"], [5, 5, "5 - all"]].forEach(([teamAScore, teamBScore, expected]) =>
+      [
+        [4, 4, "4 - all"],
+        [5, 5, "5 - all"],
+      ].forEach(([teamAScore, teamBScore, expected]) =>
         describe(`when given (${teamAScore},${teamBScore})`, () => {
           it(`it displays ${expected}`, () => {
             // given when

@@ -41,8 +41,8 @@ class Game {
       }
     }
 
-    if (this.teamA.points === this.teamB.points) {
-      if (this.teamA.points === 3) {
+    if (this.#hasEquality()) {
+      if (this.#arePointsEqualToThree()) {
         return "deuce";
       }
 
@@ -50,6 +50,14 @@ class Game {
     }
 
     return `${this.teamA.score} - ${this.teamB.score}`;
+  }
+
+  #arePointsEqualToThree() {
+    return this.teamA.points === 3;
+  }
+
+  #hasEquality() {
+    return this.teamA.points === this.teamB.points;
   }
 
   #getWinner() {

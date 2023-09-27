@@ -1,48 +1,51 @@
 import { describe, it } from "node:test";
 import assert from "node:assert";
 
+const array = ["love", "fifteen", "thirty", "fourty"];
 class Team {
-  constructor({name, score = 0}) {
+  #points;
+  constructor({name, points = 0}) {
     this.name = name;
-    this.score = score;
+    this.#points = points;
   }
 
   isWinning(opponentScore = 0) {
-    return this.score >= 4 && (this.score - opponentScore) > 0;
+    return this.#points >= 4 && (this.score - opponentScore) > 0;
   }
+
+  get score() {
+    return array[this.#points] ?? this.#points;
+  }
+
+  get points(){
+    return this.#points
+  }
+
 }
 
 function checkScore(teamAScore, teamBScore) {
-  const array = ["love", "fifteen", "thirty", "fourty"];
-  const teamA = new Team({name: 'teamA', score: teamAScore});
-  const teamB = new Team({name: 'teamB', score: teamBScore});
+  const teamA = new Team({name: 'teamA', points: teamAScore});
+  const teamB = new Team({name: 'teamB', points: teamBScore});
 
-  if (teamA.isWinning(teamB.score)) {
+  if (teamA.isWinning(teamB.points)) {
     return `${teamA.name} win`;
   }
 
-  if (teamB.isWinning(teamA.score)) {
+  if (teamB.isWinning(teamA.points)) {
     return `${teamB.name} win`;
   }
 
-  if (teamA.score === teamB.score) {
-    if (teamA.score === 3) {
+  if (teamA.points === teamB.points) {
+    if (teamA.points === 3) {
       return "deuce";
-    }
-
-    if (array[teamA.score]) {
-      return `${array[teamA.score]} - all`;
     }
 
     return `${teamA.score} - all`;
   }
 
-  return `${array[teamA.score]} - ${array[teamB.score]}`;
+  return `${teamA.score} - ${teamB.score}`;
 }
 
-function isAWin(scoreA, scoreB) {
-  return Math.abs(scoreA - scoreB) > 0;
-}
 
 describe("#Score", () => {
   [

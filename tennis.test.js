@@ -1,9 +1,9 @@
 import { describe, it } from "node:test";
 import assert from "node:assert";
 
-const array = ["love", "fifteen", "thirty", "fourty"];
 class Team {
   #points;
+  scoreNames = ["love", "fifteen", "thirty", "fourty"];
   constructor({name, points = 0}) {
     this.name = name;
     this.#points = points;
@@ -14,7 +14,7 @@ class Team {
   }
 
   get score() {
-    return array[this.#points] ?? this.#points;
+    return this.scoreNames[this.#points] ?? this.#points;
   }
 
   get points(){

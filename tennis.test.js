@@ -63,7 +63,15 @@ class Game {
   }
 
   #hasAdvantage() {
-    return this.teamA.points + this.teamB.points >= 7 && Math.abs(this.teamA.points - this.teamB.points) === 1;
+    return this.#hasMinimumAdvantageScoreTotal() && this.#hasOnePointGap();
+  }
+
+  #hasOnePointGap() {
+    return Math.abs(this.teamA.points - this.teamB.points) === 1;
+  }
+
+  #hasMinimumAdvantageScoreTotal() {
+    return this.teamA.points + this.teamB.points >= 7;
   }
 }
 

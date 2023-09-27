@@ -65,7 +65,7 @@ describe("#Score", () => {
       );
     });
     describe(`when score > 3`, () => {
-      [[4, 4, "4 - all"]].forEach(([teamAScore, teamBScore, expected]) =>
+      [[4, 4, "4 - all"], [5, 5, "5 - all"]].forEach(([teamAScore, teamBScore, expected]) =>
         describe(`when given (${teamAScore},${teamBScore})`, () => {
           it(`it displays ${expected}`, () => {
             // given when

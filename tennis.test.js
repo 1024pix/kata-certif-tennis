@@ -1,31 +1,39 @@
 import { describe, it } from "node:test";
 import assert from "node:assert";
 
+class Team {
+  constructor({name, score = 0}) {
+    this.name = name;
+    this.score = score;
+  }
+}
+
 function checkScore(teamAScore, teamBScore) {
   const array = ["love", "fifteen", "thirty", "fourty"];
+  const teamA = new Team({name: 'teamA', score: teamAScore});
+  const teamB = new Team({name: 'teamB', score: teamBScore});
 
-  if (teamAScore >= 4 && isAWin(teamAScore, teamBScore)) {
-    return "Player A win";
+  if (teamA.score >= 4 && isAWin(teamA.score, teamB.score)) {
+    return `${teamA.name} win`;
   }
 
-  if (teamBScore >= 4 && isAWin(teamAScore, teamBScore)) {
-    return "Player B win";
+  if (teamB.score >= 4 && isAWin(teamA.score, teamB.score)) {
+    return `${teamB.name} win`;
   }
 
-  if (teamAScore === teamBScore) {
-    if (teamAScore === 3) {
+  if (teamA.score === teamB.score) {
+    if (teamA.score === 3) {
       return "deuce";
     }
 
-    if (array[teamAScore]) {
-      return `${array[teamAScore]} - all`;
-      
+    if (array[teamA.score]) {
+      return `${array[teamA.score]} - all`;
     }
 
-    return `${teamAScore} - all`;
+    return `${teamA.score} - all`;
   }
 
-  return `${array[teamAScore]} - ${array[teamBScore]}`;
+  return `${array[teamA.score]} - ${array[teamB.score]}`;
 }
 
 function isAWin(scoreA, scoreB) {
@@ -97,9 +105,9 @@ describe("#Score", () => {
 
   describe(`when player win`, () => {
     [
-      [4, 0, "Player A win"],
-      [4, 2, "Player A win"],
-      [0, 4, "Player B win"],
+      [4, 0, "teamA win"],
+      [4, 2, "teamA win"],
+      [0, 4, "teamB win"],
     ].forEach(([teamAScore, teamBScore, expected]) =>
       describe(`when given (${teamAScore},${teamBScore})`, () => {
         it(`it displays ${expected}`, () => {

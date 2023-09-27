@@ -30,15 +30,11 @@ class Game {
 
   get result() {
     if (this.#hasWinner()) {
-      return `${this.#getWinner()} win`;
+      return `${this.#getLeader().name} win`;
     }
 
     if (this.#hasAdvantage()) {
-      if (this.teamA.points > this.teamB.points) {
-        return `Advantage ${this.teamA.name}`;
-      } else {
-        return `Advantage ${this.teamB.name}`;
-      }
+      return `Advantage ${this.#getLeader().name}`;
     }
 
     if (this.#hasEquality()) {
@@ -54,6 +50,10 @@ class Game {
 
   #arePointsEqualToThree() {
     return this.teamA.points === 3;
+  }
+
+  #getLeader() {
+    return this.teamA.points -  this.teamB.points > 0 ? this.teamA : this.teamB;
   }
 
   #hasEquality() {

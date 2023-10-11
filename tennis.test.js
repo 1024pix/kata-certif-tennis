@@ -1,63 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert";
 
-class Game {
-  constructor({ teamA, teamB }) {
-    this.teamA = teamA;
-    this.teamB = teamB;
-  }
-
-  get result() {
-    if (this.#hasWinner()) {
-      return `${this.#getLeader().name} win`;
-    }
-
-    if (this.#hasAdvantage()) {
-      return `Advantage ${this.#getLeader().name}`;
-    }
-
-    if (this.#hasEquality()) {
-      if (this.#arePointsEqualToThree()) {
-        return "deuce";
-      }
-
-      return `${this.teamA.getScore()} - all`;
-    }
-
-    return `${this.teamA.getScore()} - ${this.teamB.getScore()}`;
-  }
-
-  #arePointsEqualToThree() {
-    return this.teamA.points === 3;
-  }
-
-  #getLeader() {
-    return this.teamA.points -  this.teamB.points > 0 ? this.teamA : this.teamB;
-  }
-
-  #hasEquality() {
-    return this.teamA.points === this.teamB.points;
-  }
-
-  #hasWinner() {
-    return (
-      this.teamA.isWinning(this.teamB.points) ||
-      this.teamB.isWinning(this.teamA.points)
-    );
-  }
-
-  #hasAdvantage() {
-    return this.#hasMinimumAdvantageScoreTotal() && this.#hasOnePointGap();
-  }
-
-  #hasOnePointGap() {
-    return Math.abs(this.teamA.points - this.teamB.points) === 1;
-  }
-
-  #hasMinimumAdvantageScoreTotal() {
-    return this.teamA.points + this.teamB.points >= 7;
-  }
-}
 
 function checkScore(teamAScore, teamBScore) {
 
@@ -78,8 +21,60 @@ function checkScore(teamAScore, teamBScore) {
   const teamA = buildPlayer(teamAScore, "teamA");
   const teamB = buildPlayer(teamBScore, "teamB");
 
-  const game = new Game({ teamA, teamB });
-  return game.result;
+  const arePointsEqualToThree = () => {
+    return teamAScore === 3;
+  };
+
+  const getLeader = () => {
+    return teamAScore -  teamBScore > 0 ? teamA : teamB;
+  }
+
+  
+  const hasEquality = () => {
+    return teamAScore === teamBScore;
+  }
+
+
+  const hasAdvantage = () => {
+    const hasOnePointGap = () => {
+      return Math.abs(teamAScore - teamBScore) === 1;
+    }
+  
+    const hasMinimumAdvantageScoreTotal = () => {
+      return teamAScore + teamBScore >= 7;
+    }
+
+    return hasMinimumAdvantageScoreTotal() && hasOnePointGap();
+  }
+
+  const hasWinner = () => {
+    return (
+      teamA.isWinning(teamB.points) ||
+      teamB.isWinning(teamA.points)
+    );
+  }
+
+  
+  const  result = () => {
+    if (hasWinner()) {
+      return `${getLeader().name} win`;
+    }
+
+    if (hasAdvantage()) {
+      return `Advantage ${getLeader().name}`;
+    }
+
+    if (hasEquality()) {
+      if (arePointsEqualToThree()) {
+        return "deuce";
+      }
+
+      return `${teamA.getScore()} - all`;
+    }
+
+    return `${teamA.getScore()} - ${teamB.getScore()}`;
+  }
+  return result();
 }
 
 describe("#Score", () => {

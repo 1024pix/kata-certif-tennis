@@ -1,27 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert";
 
-class Team {
-  #points;
-  scoreNames = ["love", "fifteen", "thirty", "fourty"];
-  constructor({ name, points = 0 }) {
-    this.name = name;
-    this.#points = points;
-  }
-
-  isWinning(opponentPoints = 0) {
-    return this.#points >= 4 && this.#points - opponentPoints > 1;
-  }
-
-  get score() {
-    return this.scoreNames[this.#points] ?? this.#points;
-  }
-
-  get points() {
-    return this.#points;
-  }
-}
-
 class Game {
   constructor({ teamA, teamB }) {
     this.teamA = teamA;
@@ -42,10 +21,10 @@ class Game {
         return "deuce";
       }
 
-      return `${this.teamA.score} - all`;
+      return `${this.teamA.getScore()} - all`;
     }
 
-    return `${this.teamA.score} - ${this.teamB.score}`;
+    return `${this.teamA.getScore()} - ${this.teamB.getScore()}`;
   }
 
   #arePointsEqualToThree() {
@@ -58,12 +37,6 @@ class Game {
 
   #hasEquality() {
     return this.teamA.points === this.teamB.points;
-  }
-
-  #getWinner() {
-    return this.teamA.isWinning(this.teamB.points)
-      ? this.teamA.name
-      : this.teamB.name;
   }
 
   #hasWinner() {
@@ -87,11 +60,25 @@ class Game {
 }
 
 function checkScore(teamAScore, teamBScore) {
-  const teamA = new Team({ name: "teamA", points: teamAScore });
-  const teamB = new Team({ name: "teamB", points: teamBScore });
+
+  const scoreNames = ["love", "fifteen", "thirty", "fourty"];
+
+  const isWinning = ((points = 0) => (opponentPoints = 0) => {
+    return points >= 4 && points - opponentPoints > 1;
+  });
+
+  const getScore = ((points = 0) => () => {
+    return scoreNames[points] ?? points;
+  });
+
+  const buildPlayer = ((points, name) => {
+    return {name, points, isWinning: isWinning(points), getScore: getScore(points)}
+  });
+
+  const teamA = buildPlayer(teamAScore, "teamA");
+  const teamB = buildPlayer(teamBScore, "teamB");
 
   const game = new Game({ teamA, teamB });
-
   return game.result;
 }
 
@@ -145,6 +132,7 @@ describe("#Score", () => {
       });
     })
   );
+
   [
     [0, 1, "love - fifteen"],
     [0, 2, "love - thirty"],
